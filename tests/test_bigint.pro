@@ -10,9 +10,11 @@ QT      += testlib
 QT      -= gui
 
 HEADERS += \
-    ../src/bigint.hpp
+    ../src/bigint.hpp \
+    ../src/levelfacade.h
 
 SOURCES += \
+    ../src/levelfacade.cpp \
     ../src/bigint.cpp \
     #test_bigint.cpp \
     ../src/mycode.cpp \

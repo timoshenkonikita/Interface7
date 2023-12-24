@@ -1,5 +1,5 @@
 #include <QtTest/QtTest>
-#include "../src/mycode.h"
+#include "../src/levelfacade.h"
 
 #include <sstream>
 using namespace std;
@@ -7,20 +7,35 @@ using namespace std;
 class TestMyCode: public QObject {
     Q_OBJECT
 private slots:
-    void testIvan();
+    void testGetAllLevels();
+    void testOnLevelSelected();
+private:
+    LevelFacade levelFacade;
 };
+void TestMyCode::testGetAllLevels() {
+    QStringList levels = levelFacade.get_all_levels();
 
-void TestMyCode::testIvan() {
-    std::stringstream sstr;
-    stringstream isst;
-    isst << "Ivan";
+    QVERIFY2(!levels.isEmpty(), "Список уровней не должен быть пустым");
+    qDebug() << "Levels in the directory:" << levels;
+}
 
-    hello(isst, sstr);
+void TestMyCode::testOnLevelSelected() {
+    // Тестирование функции onLevelSelected()
 
-    string str;
-    getline(sstr, str);
+    // Создаем QSignalSpy для отслеживания сигнала levelSelected
+    QSignalSpy spy(&levelFacade, SIGNAL(levelSelected(QString)));
 
-    QCOMPARE(str == "hello Ivan", true);
+    // Вызываем onLevelSelected с каким-то уровнем
+    QString levelName = "test_level.txt";
+    levelFacade.onLevelSelected(levelName);
+
+    // Проверяем, был ли сигнал levelSelected отправлен
+    QVERIFY2(spy.count() == 1, "Сигнал levelSelected должен быть отправлен один раз");
+
+    // Проверяем, был ли переданный уровень правильным
+    QList<QVariant> arguments = spy.takeFirst();
+    QString emittedLevel = arguments.at(0).toString();
+    QCOMPARE(emittedLevel, levelName);
 }
 
 QTEST_MAIN(TestMyCode)
