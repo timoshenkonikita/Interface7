@@ -8,12 +8,14 @@ INCLUDEPATH += .
 CONFIG  += c++11
 QT      += testlib
 QT      -= gui
+QT += core gui testlib widgets
 
 HEADERS += \
-    ../src/bigint.hpp
+    ../src/form.h
 
 SOURCES += \
-    ../src/bigint.cpp \
-    #test_bigint.cpp \
-    ../src/mycode.cpp \
+    ../src/form.cpp \
     test_mycode.cpp
+
+FORMS += \
+    ../src/form.ui
